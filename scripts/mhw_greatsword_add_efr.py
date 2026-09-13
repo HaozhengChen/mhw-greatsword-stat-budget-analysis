@@ -1,8 +1,11 @@
 import pandas as pd
 from pathlib import Path
 
-INPUT_CSV = "mhw_greatsword_classified.csv"
-OUTPUT_CSV = "mhw_greatsword_efr.csv"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = REPO_ROOT / "data"
+
+INPUT_CSV = DATA_DIR / "mhw_greatsword_classified.csv"
+OUTPUT_CSV = DATA_DIR / "mhw_greatsword_efr.csv"
 
 
 def safe_number(value, default=0.0):

@@ -1,8 +1,11 @@
 import pandas as pd
 from pathlib import Path
 
-INPUT_CSV = "mhw_greatsword_efr.csv"
-OUTPUT_CSV = "mhw_greatsword_efr_no_siege.csv"
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = REPO_ROOT / "data"
+
+INPUT_CSV = DATA_DIR / "mhw_greatsword_efr.csv"
+OUTPUT_CSV = DATA_DIR / "mhw_greatsword_efr_no_siege.csv"
 
 EXCLUDE_SOURCE_CATEGORIES = {
     "siege_kulve",
