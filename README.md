@@ -217,93 +217,83 @@ This model is closer to hidden budget analysis because it studies deviation from
 └── README.md
 ```
 
-If the repository is kept flat instead of using folders, the scripts can still be run as long as the CSV files are in the same working directory.
-
 ## Installation
 
+Use Python 3.11 or newer and keep the repository's folder structure.
+From the repository root:
+
 ```bash
-pip install pandas numpy matplotlib scikit-learn tabulate
+python -m venv .venv
+source .venv/bin/activate  # Windows PowerShell: .venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
 ```
+
+The dependency versions in `requirements.txt` match the verified offline environment.
+For Chinese chart labels, install a font recognized by the scripts, such as
+Noto Sans CJK SC, Microsoft YaHei, or PingFang SC. Without one, the analysis still
+runs but some chart labels may be missing.
 
 ## Usage
 
-### 1. Add classification fields
+### Reproduce from the committed data snapshot
 
 ```bash
-python mhw_greatsword_add_classification_fields.py
+python run_pipeline.py
 ```
 
-Input:
+This command runs classification, EFR calculation, siege exclusion, visualizations,
+and regression in order. It reads `data/mhw_greatsword_filtered.csv` and rebuilds
+derived CSV files in `data/` plus the two existing report folders. It does not
+contact Kiranico. Re-running it overwrites generated outputs in those locations.
 
-```
-mhw_greatsword_filtered.csv
-```
-
-Output:
-
-```
-mhw_greatsword_classified.csv
-```
-
-### 2. Calculate EFR
+To rebuild only the three derived CSV files:
 
 ```bash
-python mhw_greatsword_add_efr.py
+python run_pipeline.py --data-only
 ```
 
-Input:
-
-```
-mhw_greatsword_classified.csv
-```
-
-Output:
-
-```
-mhw_greatsword_efr.csv
-```
-
-### 3. Exclude siege-system weapons
+Every script resolves data and output paths relative to its own repository,
+so execution does not depend on the shell's working directory. For example:
 
 ```bash
-python mhw_greatsword_exclude_siege_weapons.py
+python /absolute/path/to/mhw-greatsword-stat-budget-analysis/run_pipeline.py
 ```
 
-Input:
+### Run an individual stage
 
-```
-mhw_greatsword_efr.csv
-```
-
-Output:
-
-```
-mhw_greatsword_efr_no_siege.csv
-```
-
-### 4. Generate visualizations
+Run these commands from the repository root, in dependency order:
 
 ```bash
-python mhw_greatsword_visualize_efr.py
+python scripts/mhw_greatsword_add_classification_fields.py
+python scripts/mhw_greatsword_add_efr.py
+python scripts/mhw_greatsword_exclude_siege_weapons.py
+python scripts/mhw_greatsword_visualize_efr.py
+python scripts/mhw_greatsword_weapon_value_regression.py
 ```
 
-Output:
-
-```
-mhw_greatsword_visuals/
-```
-
-### 5. Run regression models
+### Check the numerical assumptions
 
 ```bash
-python mhw_greatsword_weapon_value_regression.py
+python -m unittest discover -s tests -v
 ```
 
-Output:
+The tests cover positive and negative affinity, hand-calculated EFR, zero-base
+relative gain, train-only rarity baselines, missing baselines, and label boundaries.
+They verify these assumptions, not whether theoretical EFR predicts real hunt DPS.
 
+### Optional: refresh source data
+
+The scraper is separate from the offline pipeline:
+
+```bash
+python -m pip install -r requirements-scraper.txt
+python scripts/mhw_kiranico_greatsword_scraper.py
 ```
-mhw_greatsword_regression_outputs/
-```
+
+It reads `data/greatsword_final_urls.txt`, contacts Kiranico, and overwrites
+`data/mhw_greatsword_raw.csv` and `data/mhw_greatsword_filtered.csv`. Review its
+source/filter rules before refreshing; the offline reproduction check does not
+verify today's website structure or the completeness of freshly scraped data.
 
 ## Key outputs
 

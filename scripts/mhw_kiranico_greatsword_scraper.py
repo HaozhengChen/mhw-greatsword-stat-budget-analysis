@@ -1,3 +1,4 @@
+from pathlib import Path
 import re
 import time
 import csv
@@ -6,6 +7,9 @@ from urllib.parse import urljoin
 import requests
 from bs4 import BeautifulSoup
 
+
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = REPO_ROOT / "data"
 
 BASE_URL = "https://mhworld.kiranico.com"
 LIST_URL = "https://mhworld.kiranico.com/zh/weapons?type=0"
@@ -567,7 +571,7 @@ def main():
     5. 把下面 use_url_file 改成 True
     """
     use_url_file = True
-    url_file_path = "greatsword_final_urls.txt"
+    url_file_path = DATA_DIR / "greatsword_final_urls.txt"
 
     if use_url_file:
         links = scrape_from_url_file(url_file_path)
@@ -588,8 +592,8 @@ def main():
             print(f"Failed: {url}")
             print(error)
 
-    raw_path = "mhw_greatsword_raw.csv"
-    filtered_path = "mhw_greatsword_filtered.csv"
+    raw_path = DATA_DIR / "mhw_greatsword_raw.csv"
+    filtered_path = DATA_DIR / "mhw_greatsword_filtered.csv"
 
     write_csv(raw_path, rows)
 

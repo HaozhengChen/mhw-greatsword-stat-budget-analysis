@@ -15,8 +15,11 @@ from sklearn.model_selection import KFold, cross_val_score
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
 
-INPUT_CSV = "mhw_greatsword_efr_no_siege.csv"
-OUTPUT_DIR = Path("mhw_greatsword_regression_outputs")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = REPO_ROOT / "data"
+
+INPUT_CSV = DATA_DIR / "mhw_greatsword_efr_no_siege.csv"
+OUTPUT_DIR = REPO_ROOT / "mhw_greatsword_regression_outputs"
 CHART_DIR = OUTPUT_DIR / "charts"
 REPORT_PATH = OUTPUT_DIR / "weapon_value_regression_report.md"
 

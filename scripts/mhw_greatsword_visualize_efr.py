@@ -7,8 +7,11 @@ import matplotlib.pyplot as plt
 from matplotlib import font_manager
 
 
-INPUT_CSV = "mhw_greatsword_efr.csv"
-OUTPUT_DIR = Path("mhw_greatsword_visuals")
+REPO_ROOT = Path(__file__).resolve().parents[1]
+DATA_DIR = REPO_ROOT / "data"
+
+INPUT_CSV = DATA_DIR / "mhw_greatsword_efr.csv"
+OUTPUT_DIR = REPO_ROOT / "mhw_greatsword_visuals"
 CHART_DIR = OUTPUT_DIR / "charts"
 TABLE_DIR = OUTPUT_DIR / "summary_tables"
 REPORT_PATH = OUTPUT_DIR / "mhw_greatsword_visual_report.md"
